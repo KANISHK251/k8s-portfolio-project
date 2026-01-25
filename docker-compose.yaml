@@ -1,0 +1,28 @@
+
+services:
+  front_web:
+    build: 
+      context: ./frontend/
+    ports: 
+      - 80:80
+    depends_on:
+      - backend_django
+
+  backend_django:
+    build:
+      context: ./backend/
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql 
+
+  mysql:
+    image: mysql:8.0
+      container_name: mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    env_file:
+      - .env
+
+volumes:
+  mysql_data:

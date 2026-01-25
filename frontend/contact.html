@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Kanishk</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    .contact-card {
+      background: #0d1b2a;
+      padding: 40px;
+      width: 380px;
+      border-radius: 14px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+
+    .contact-card h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #00e5ff;
+    }
+
+    label {
+      font-size: 14px;
+      color: #cfd8dc;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: #1b263b;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #90a4ae;
+    }
+
+    input:focus,
+    textarea:focus {
+      border: 1px solid #00e5ff;
+    }
+
+    textarea {
+      resize: none;
+      height: 110px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00e5ff;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00bcd4;
+      transform: translateY(-1px);
+    }
+
+    .note {
+      margin-top: 15px;
+      font-size: 12px;
+      text-align: center;
+      color: #b0bec5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="contact-card">
+    <h2>Contact Me</h2>
+
+    <!-- NO JAVASCRIPT -->
+    <form method="POST" action="/api/contact/">
+      <label>Your Name</label>
+      <input type="text" name="name" placeholder="Enter your name" required>
+
+      <label>Your Email</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+
+      <label>Message</label>
+      <textarea name="message" placeholder="Write your message..." required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+
+    <div class="note">
+      I usually reply within 24 hours 🚀
+    </div>
+  </div>
+
+</body>
+</html>
