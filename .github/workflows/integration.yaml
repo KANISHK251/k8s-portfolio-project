@@ -1,0 +1,64 @@
+name: Integration
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: contact_db
+          MYSQL_USER: app_user
+          MYSQL_PASSWORD: app_pass
+          MYSQL_ROOT_PASSWORD: app_pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # -------- BUILD STAGE Image build in backend and frontend image--------
+      - name: Build backend image
+        run: docker build -t backend-test ./backend
+
+      - name: Build frontend image
+        run: docker build -t frontend-test ./frontend
+
+      # -------- TEST STAGE In django container--------
+      - name: Run Django container
+        run: |
+          docker run -d \
+            --name backend \
+            --network host \
+            -e DB_NAME=contact_db \
+            -e DB_USER=app_user \
+            -e DB_PASSWORD=app_pass \
+            -e DB_HOST=127.0.0.1 \
+            -e DB_PORT=3306 \
+            backend-test
+
+      - name: Run Django migrations
+        run: docker exec backend python manage.py migrate
+
+      - name: Django unit tests
+        run: docker exec backend python manage.py test
+
+      - name: API smoke test
+        run: |
+          sleep 5
+          curl -X POST http://localhost:8000/api/contact/ \
+            -d "name=CI-Test&email=ci@test.com&message=k8s-forms"
+
