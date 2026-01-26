@@ -38,8 +38,12 @@ jobs:
         run: docker build -t frontend-test ./frontend
 
       # -------- TEST STAGE In django container--------
+
+jobs:
   test:
-  
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Run Django container
         run: |
           docker run -d \
