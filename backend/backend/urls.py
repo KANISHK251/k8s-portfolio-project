@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django.urls import path
-from contact.views import contact_api
+from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/contact/", contact_api),
+    path("api/", include("contact.urls")),
 ]

@@ -1,8 +1,10 @@
-# ----------------builder stage --------------------------
+    # ----------------builder stage --------------------------
 
-    From Python:3.14 As builder
+    From python:3.12 As builder
 
     WORKDIR /wheels
+
+    COPY requirements.txt .
     
     RUN pip install --upgrade pip wheel
     
@@ -10,12 +12,14 @@
     
     # -----------------------RUN TIME STAGE ----------------------
     
-    FROM Python:3.14-slim
+    FROM python:3.12-slim
     
     COPY --from=builder /wheels /wheels
     
-    RUN pip install --no-cache-dir --no-index --find-links=/wheels
+    RUN pip install --no-cache-dir --no-index --find-links=/wheels /wheels/*.whl
     
-    COPY backend/ .
+    COPY . .
+  
+    RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
-    CMD ["python","manage.py", "runserver", "0.0.0.0:8000"]
+    CMD ["sh","-c","while ! nc -z mysql 3306; do sleep 2; done && python manage.py runserver 0.0.0.0:8000"]
