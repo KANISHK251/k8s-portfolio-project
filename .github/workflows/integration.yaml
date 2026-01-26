@@ -38,11 +38,12 @@ jobs:
         run: docker build -t frontend-test ./frontend
 
       # -------- TEST STAGE In django container--------
+  test:
+  
       - name: Run Django container
         run: |
           docker run -d \
             --name backend \
-            -p 8000:8000 \
             --network host \
             -e DB_NAME=contact_db \
             -e DB_USER=app_user \
