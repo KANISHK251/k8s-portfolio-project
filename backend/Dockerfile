@@ -22,4 +22,4 @@
   
     RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
-    CMD ["sh","-c","while ! nc -z mysql 3306; do sleep 2; done && python manage.py runserver 0.0.0.0:8000"]
+    CMD ["sh","-c","while ! nc -z $DB_HOST 3306; do sleep 2; done && python manage.py runserver 0.0.0.0:8000"]
