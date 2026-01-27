@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     services:
@@ -18,8 +18,6 @@ jobs:
           MYSQL_USER: app_user
           MYSQL_PASSWORD: app_pass
           MYSQL_ROOT_PASSWORD: app_pass
-        ports:
-          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping -h localhost"
           --health-interval=10s
@@ -27,40 +25,31 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Build backend image
         run: docker build -t backend-test ./backend
 
-      - name: Build frontend image
-        run: docker build -t frontend-test ./frontend
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build   
-
-    steps:
       - name: Run Django container
         run: |
           docker run -d \
             --name backend \
-            --network host \
+            -p 8000:8000 \
             -e DB_NAME=contact_db \
             -e DB_USER=app_user \
             -e DB_PASSWORD=app_pass \
-            -e DB_HOST=127.0.0.1 \
+            -e DB_HOST=mysql \
             -e DB_PORT=3306 \
             backend-test
 
-      - name: Run Django migrations
+      - name: Run migrations
         run: docker exec backend python manage.py migrate
 
-      - name: Django unit tests
+      - name: Run tests
         run: docker exec backend python manage.py test
 
       - name: API smoke test
         run: |
           sleep 5
           curl -X POST http://localhost:8000/api/contact/ \
-            -d "name=CI-Test&email=ci@test.com&message=k8s-forms"
+            -d "name=CI-Test&email=ci@test.com&message=ci"
