@@ -1,0 +1,14 @@
+# Frontend files – NEVER enter backend image
+*.html
+*.jpg
+*.jpeg
+*.png
+frontend/
+
+# Local Python stuff
+venv/
+__pycache__/
+
+# Git
+.git
+.gitignore
