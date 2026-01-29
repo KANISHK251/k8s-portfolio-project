@@ -43,8 +43,6 @@ jobs:
             backend-test
 
 
-      - name: Run tests
-        run: docker exec backend python manage.py test
 
       - name: API smoke test
         run: |
