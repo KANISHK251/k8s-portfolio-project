@@ -38,13 +38,10 @@ jobs:
             -e DB_NAME=contact_db \
             -e DB_USER=app_user \
             -e DB_PASSWORD=app_pass \
-            -e DB_HOST=mysql \
+            -e DB_HOST=127.0.0.1 \
             -e DB_PORT=3306 \
             backend-test
 
-
-      - name: Run migrations
-        run: docker exec backend python manage.py migrate
 
       - name: Run tests
         run: docker exec backend python manage.py test
