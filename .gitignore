@@ -5,8 +5,6 @@ __pycache__/
 # Virtual environment
 venv/
 
-# Environment variables
-.env
 
 # Docker volumes (optional)
 mysql_data/
